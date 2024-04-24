@@ -10,7 +10,7 @@ This module lets you push container images from Dagger to ACR without having to 
 From CLI, to push `ubuntu:latest` to a given ACR repo, by way of example:
 
 ```
-dagger call -m github.com/lukemarsden/dagger-azure \
+dagger call -m github.com/daggerverse/dagger-azure \
     acr-push-example --acr-name daggertest --repo test --azure-credentials ~/.azure/
 ```
 
