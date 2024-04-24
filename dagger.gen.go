@@ -4857,7 +4857,7 @@ func main() {
 
 func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName string, inputArgs map[string][]byte) (_ any, err error) {
 	switch parentName {
-	case "Aws":
+	case "Azure":
 		switch fnName {
 		default:
 			return nil, fmt.Errorf("unknown function %s", fnName)
@@ -4865,7 +4865,7 @@ func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName st
 	case "":
 		return dag.CurrentModule().
 			WithObject(
-				dag.TypeDef().WithObject("Aws").
+				dag.TypeDef().WithObject("Azure").
 					WithFunction(
 						dag.Function("ContainerEcho",
 							dag.TypeDef().WithObject("Container")).

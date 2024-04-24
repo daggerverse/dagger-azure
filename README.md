@@ -1,34 +1,26 @@
-# Dagger AWS module
+# Dagger Azure module
 
-Known to work with Dagger v0.9.5 and v0.9.8.
+Known to work with Dagger v0.11.0.
 
-## S3 List
 
-List the S3 buckets in your account:
-```
-dagger call -m github.com/lukemarsden/dagger-aws list --aws-credentials ~/.aws/credentials
-```
+## Push Image to Private Azure Container Registry (ACR) Repo
 
-## Push Image to Private ECR Repo
+This module lets you push container images from Dagger to ACR without having to manually configure docker with ACR credentials. It will fetch them automatically behind the scenes.
 
-This module lets you push container images from Dagger to ECR without having to manually configure docker with ECR credentials. It will fetch them automatically behind the scenes.
-
-From CLI, to push `ubuntu:latest` to a given ECR repo, by way of example:
+From CLI, to push `ubuntu:latest` to a given ACR repo, by way of example:
 
 ```
-dagger call -m github.com/lukemarsden/dagger-aws \
-    ecr-push-example --region us-east-1 \
-    --aws-credentials ~/.aws/credentials \
-    --aws-account-id 12345 --repo test
+dagger call -m github.com/lukemarsden/dagger-azure \
+    acr-push-example --acr-name daggertest --repo test --azure-credentials ~/.azure/
 ```
 
-Check `region` and `aws-account-id` arguments and update them to match your AWS account and location of your private repo. Update `repo` to the name of your repo.
+Check `acr-name` and update it to match the top-level name of your ACR registry. Update `repo` to the name of the repo you want the image to appear under within the ACR registry.
 
-Make sure you've created the repo in your ECR account. You can do that under Amazon ECR --> Private registry --> Repositories in the AWS console.
+Make sure you've created the registry in your Azure account.
 
 ## From Dagger Code
 
-Call the EcrPush method on this module with the awsCredentials *File (e.g. ~/.aws/credentials) as the first argument, then the region, awsAccountId and repo as strings, then finally the container you wish to push as the final argument.
+Call the AcrPush method on this module with the azureCredentials *Directory (e.g. ~/.azure/) as the first argument, then the acrName and repo as strings, then finally the container you wish to push as the final argument.
 
 For example:
 
@@ -37,9 +29,9 @@ func (y *YourThing) PushYourThings(ctx context.Context, awsCredentials *File) {
     ctr := dag.Container()
         .From("yourbase:image")
         .YourThings()
-    // get region, awsAccountId, repo
-    out, err := m.EcrPush(ctx, awsCredentials, region, awsAccountId, repo, ctr)
+    // get acrName, repo
+    out, err := m.EcrPush(ctx, acrName, repo, ctr)
 }
 ```
 
-See `EcrPushExample` for a concrete example.
+See `AcrPushExample` for a concrete example.
